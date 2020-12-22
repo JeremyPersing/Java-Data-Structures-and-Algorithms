@@ -1,5 +1,6 @@
 public class Main {
-     static class Node {
+
+    static class Node {
         Node next;
         int value;
         Node(int value) {
