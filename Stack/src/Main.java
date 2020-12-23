@@ -38,6 +38,10 @@ public class Main {
 	    System.out.println(stack.pop());
         System.out.println(stack.pop());
         System.out.println(stack.pop());
-        System.out.println("Top of stack value: " + stack.top.value);
+        System.out.println(stack.pop());
+        System.out.println(stack.pop());
+        stack.push(69);
+        System.out.println(stack.top.value);
+        System.out.println(stack.pop());
     }
 }
