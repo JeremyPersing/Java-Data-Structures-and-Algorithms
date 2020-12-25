@@ -14,25 +14,34 @@ public class Main {
             insertNode(digit, root);
         }
 
-        void insertNode(int value, Node tempRoot) {
-            if (tempRoot == null) {
-                root = new Node(value);
+        void insertNode(int value, Node root) {
+            // No root
+            if (root == null) {
+                this.root = new Node(value);
             }
             else {
-                if (value <= tempRoot.value && tempRoot.left == null) {
-                    tempRoot.left = new Node(value);
+                // Value is less than or equal to root's value
+                if (value <= root.value) {
+                    // If there is no leaf node, create one
+                    if (root.left == null) {
+                        root.left = new Node(value);
+                    }
+                    // Otherwise keep going
+                    else {
+                        insertNode(value, root.left);
+                    }
                 }
-                else if (value > tempRoot.value && tempRoot.right == null) {
-                    tempRoot.right = new Node(value);
-                }
-                else if (value <= tempRoot.value && tempRoot.left != null) {
-                    insertNode(value, tempRoot.left);
-                }
-                else if (value > tempRoot.value && tempRoot.right != null) {
-                    insertNode(value, tempRoot.right);
+                // Value is greater than root's value
+                else {
+                    // If there is no leaf node, create one
+                    if (root.right == null) {
+                        root.right = new Node(value);
+                    }
+                    else {
+                        insertNode(value, root.right);
+                    }
                 }
             }
-
         }
 
         void delete(int digit) {
@@ -43,52 +52,46 @@ public class Main {
             if (root == null) {
                 return null;
             }
-            // Deletion value is less than the current root value
-            else if (value < root.value) {
+
+            // Find the position of the leaf
+            if (value < root.value) {
                 root.left = deleteNode(value, root.left);
             }
-            // Deletion value is greater than the current root value
             else if (value > root.value) {
                 root.right = deleteNode(value, root.right);
             }
-            // Deletion value is equal to the current root value (ie DELETE THIS NODE)
+            // You're on the correct leaf Node now
             else {
-                // No Children
+                // If the leaf has no children
                 if (root.right == null && root.left == null) {
-                    System.out.println("Should be deleting " + root.value);
                     return null;
                 }
-                // One Child
-                else if (root.left == null) {
-                    System.out.println("Should be deleting " + root.value);
+                // The leaf has 1 child
+                if (root.left == null) {
                     return root.right;
                 }
                 else if (root.right == null) {
-                    System.out.println("Should be deleting " + root.value);
                     return root.left;
                 }
-                // Two Children
+                // Leaf has 2 children
                 else {
-                    // Find the minimum on the right of the node
-                    Node min = findMin(root.right);
-                    root.value = min.value;
-                    // Within the right subtree, delete the minimum node
-                    // Because you just replaced the node you wanted to delete with it
-                    root.right = deleteNode(root.value, root.right);
-                    System.out.println("Should be deleting " + root.value);
+                    // Find the minimum value on the right side of the root
+                    int min = getMinimum(root.right).value;
+                    System.out.println("Minimum value is " + min);
+                    // Replace the current node's value for the minimum value
+                    root.value = min;
+                    // Delete the previous min node because it is now where the 'deleted' node was
+                    root.right = deleteNode(min, root.right);
                 }
             }
             return root;
         }
 
-        Node findMin(Node tempRoot) {
-            if (tempRoot.left == null) {
-                return tempRoot;
+        Node getMinimum(Node root) {
+            while (root.left != null) {
+                root = root.left;
             }
-            else {
-                return findMin(tempRoot.left);
-            }
-
+            return root;
         }
 
         void preOrderTraversal(Node root) {
@@ -122,21 +125,17 @@ public class Main {
     public static void main(String[] args) {
         // Creation of the binary tree
         BinaryTree bt = new BinaryTree();
-        /*int arr [] = new int[] {7, 15, 2, 3, 19, 20, 35, 42, 10, 56, 99, 3};
-        for (int i = 0; i < arr.length; i++) {
-            bt.insert(arr[i], bt.root);
-        }*/
-        bt.insert(15);
         bt.insert(10);
-        bt.insert(25);
+        bt.insert(7);
+        bt.insert(11);
         bt.insert(6);
+        bt.insert(8);
         bt.insert(20);
-        bt.insert(19);
+        bt.insert(1);
+        bt.insert(9);
+        bt.insert(14);
         bt.insert(22);
-        bt.insert(33);
-        bt.delete(15);
-        bt.delete(33);
-        bt.delete(10);
+        bt.delete(8);
         System.out.println("PreOrder Traversal");
         bt.preOrderTraversal(bt.root);
         System.out.println("\nInOrder Traversal");
